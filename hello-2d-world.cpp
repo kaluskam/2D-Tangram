@@ -151,17 +151,10 @@ void MyApp::drawScene() {
   Shaders->bind();
 
   
-  int counter = 0;
-  //for (auto shape : shapes) {
-      glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
-      glDrawElements(GL_TRIANGLES, 27, GL_UNSIGNED_BYTE,
-          reinterpret_cast<GLvoid*>(0));
-     // counter += shape.indicesArrSize;
-  //}
-    /*  glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
-      glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_BYTE,
-          reinterpret_cast<GLvoid*>(2));
-*/
+    glUniformMatrix4fv(MatrixId, 1, GL_FALSE, glm::value_ptr(I));
+    glDrawElements(GL_TRIANGLES, 27, GL_UNSIGNED_BYTE,
+        reinterpret_cast<GLvoid*>(0));
+ 
 
 
 

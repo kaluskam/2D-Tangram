@@ -1,8 +1,6 @@
 #include "mglShapes.hpp"
 
 namespace mgl {
-
-
     glm::mat4 ModelMatrix(glm::vec3 translation, GLfloat scale, GLfloat degrees) {
         glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation);
         glm::mat4 rotationMatrix = glm::rotate(translationMatrix, glm::radians(degrees), glm::vec3(0, 0, 1));
@@ -19,8 +17,6 @@ namespace mgl {
             glm::vec4(1.0f, 0.0f, 0.0f, 1.0f),
             glm::vec4(0.0f, 1.0f, 0.0f, 1.0f)
     };
-
-
 
     RightTriangle::RightTriangle(glm::vec3 p, GLfloat s, float degrees, glm::vec4 c) : Shape(new Vertex[3], 3, new GLubyte[3], 3) {
         color = c;
