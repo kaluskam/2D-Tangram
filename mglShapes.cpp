@@ -2,6 +2,13 @@
 
 namespace mgl {
 
+
+    glm::mat4 ModelMatrix(glm::vec3 translation, GLfloat scale, GLfloat degrees) {
+        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), translation);
+        glm::mat4 rotationMatrix = glm::rotate(translationMatrix, glm::radians(degrees), glm::vec3(0, 0, 1));
+        return glm::scale(rotationMatrix, glm::vec3(scale));
+    }
+
     Vertex GlmVec4ToVertex(glm::vec4 v, glm::vec4 c) {
      return {
          {v.x, v.y, v.z, v.w}, {c.x, c.y, c.z, c.w} };
@@ -17,13 +24,10 @@ namespace mgl {
 
     RightTriangle::RightTriangle(glm::vec3 p, GLfloat s, float degrees, glm::vec4 c) : Shape(new Vertex[3], 3, new GLubyte[3], 3) {
         color = c;
-
-        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), p);
-        glm::mat4 rotationMatrix = glm::rotate(translationMatrix, glm::radians(degrees), glm::vec3(0, 0, 1)); // ASK         
-        glm::mat4 transformationM = glm::scale(rotationMatrix, glm::vec3(s));
+        glm::mat4 modelMatrix = ModelMatrix(p, s, degrees);
         
         for (int i = 0; i < 3; i++) {
-            vArray[i] = GlmVec4ToVertex(transformationM * BASE_VERTICES[i], color);
+            vArray[i] = GlmVec4ToVertex(modelMatrix * BASE_VERTICES[i], color);
             indices[i] = i;
         }
     }
@@ -38,10 +42,7 @@ namespace mgl {
 
     Square::Square(glm::vec3 p, GLfloat s, float degrees, glm::vec4 c) : Shape(new Vertex[4], 4, new GLubyte[6], 6) {
         color = c;
-
-        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), p);
-        glm::mat4 rotationMatrix = glm::rotate(translationMatrix, glm::radians(degrees), glm::vec3(0, 0, 1));
-        glm::mat4 transformationM = glm::scale(rotationMatrix, glm::vec3(s));
+        glm::mat4 modelMatrix = ModelMatrix(p, s, degrees);
 
         indices[0] = 0;
         indices[1] = 1;
@@ -51,7 +52,7 @@ namespace mgl {
         indices[5] = 0;
 
         for (int i = 0; i < 4; i++) {
-            vArray[i] = GlmVec4ToVertex(transformationM * BASE_VERTICES[i], color);
+            vArray[i] = GlmVec4ToVertex(modelMatrix * BASE_VERTICES[i], color);
         }
     }
 
@@ -64,11 +65,8 @@ namespace mgl {
     };
 
     Parallelogram::Parallelogram(glm::vec3 p, GLfloat s, float degrees, glm::vec4 c) : Shape(new Vertex[4], 4, new GLubyte[6], 6) {
-        color = c;
-
-        glm::mat4 translationMatrix = glm::translate(glm::mat4(1.0f), p);
-        glm::mat4 rotationMatrix = glm::rotate(translationMatrix, glm::radians(degrees), glm::vec3(0, 0, 1));
-        glm::mat4 transformationM = glm::scale(rotationMatrix, glm::vec3(s));
+        color = c;      
+        glm::mat4 modelMatrix = ModelMatrix(p, s, degrees);
 
         indices[0] = 0;
         indices[1] = 1;
@@ -78,7 +76,7 @@ namespace mgl {
         indices[5] = 0;
 
         for (int i = 0; i < 4; i++) {
-            vArray[i] = GlmVec4ToVertex(transformationM * BASE_VERTICES[i], color);
+            vArray[i] = GlmVec4ToVertex(modelMatrix * BASE_VERTICES[i], color);
         }
     }
 }

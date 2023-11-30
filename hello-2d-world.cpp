@@ -54,56 +54,20 @@ void MyApp::createShaderProgram() {
   MatrixId = Shaders->Uniforms["Matrix"].index;
 }
 
+//////////////////////////////////////////////////////////////////// Define shapes
+
+float minSqrtOneEight = -glm::sqrt(0.125);
+mgl::RightTriangle triangle = mgl::RightTriangle(glm::vec3(-0.5, 0.0, 0), 0.5f, 0.0f, glm::vec4(0.9, 0.2, 0.4, 1));
+mgl::RightTriangle triangle2 = mgl::RightTriangle(glm::vec3(0.0, minSqrtOneEight, 0), 0.25 / glm::sqrt(0.5), 90.0f, glm::vec4(0.7, 0.1, 0.7, 1));
+mgl::RightTriangle triangle3 = mgl::RightTriangle(glm::vec3(minSqrtOneEight, minSqrtOneEight, 0), 0.5f, 45.0f, glm::vec4(0.4, 0.4, 1, 1));
+mgl::RightTriangle triangle4 = mgl::RightTriangle(glm::vec3(0.0, minSqrtOneEight + 0.25, 0), 0.25f, 270.0f, glm::vec4(0.1, 0.7, 0.7, 1));
+mgl::RightTriangle triangle5 = mgl::RightTriangle(glm::vec3(-0.25 + glm::sqrt(1 / 32.0), minSqrtOneEight + 0.75 + glm::sqrt(1 / 32.0), 0), 0.25f, 225.0f, glm::vec4(1, 0.3, 0.2, 1));
+mgl::Square square = mgl::Square(glm::vec3(0, minSqrtOneEight + 0.25, 0), 0.25f, 0.0f, glm::vec4(0.1, 0.6, 0, 1));
+mgl::Parallelogram parallelogram = mgl::Parallelogram(glm::vec3(0, minSqrtOneEight + 0.5, 0), 0.25f, 0.0f, glm::vec4(0.9, 0.7, 0.1, 1));
+
+std::vector<mgl::Shape> shapes = { triangle, triangle2, triangle3, triangle4, triangle5, square, parallelogram };
+
 //////////////////////////////////////////////////////////////////// VAOs & VBOs
-
-
-
-//Vertex GlmVec4ToVertex(glm::vec4 v, glm::vec4 c) {
-//    return {
-//        {v.x, v.y, v.z, v.w}, {c.x, c.y, c.z, c.w} };
-//}
-//
-//std::vector<Vertex> GetVerticesOfShape(mgl::Shape shape ) {
-//    std::vector<Vertex> vertices = std::vector<Vertex>();
-//    for (auto v : shape.vertices) {
-//        vertices.push_back(GlmVec4ToVertex(v, shape.color));
-//    }
-//    return vertices;
-//};
-
-mgl::RightTriangle triangle = mgl::RightTriangle(glm::vec3(-0.5, -0.0, 0),  0.5f, 0.0f, glm::vec4(0.9, 0.2, 0.4, 1));
-mgl::RightTriangle triangle2 = mgl::RightTriangle(glm::vec3(0.0,-glm::sqrt(0.5)/2.0, 0), 0.25 / glm::sqrt(0.5), 90.0f, glm::vec4(0.7, 0.1, 0.7, 1));
-mgl::RightTriangle triangle3 = mgl::RightTriangle(glm::vec3(-0.3535, -0.3535, 0), 0.5f, 45.0f, glm::vec4(0.4, 0.4, 1, 1));
-mgl::RightTriangle triangle4 = mgl::RightTriangle(glm::vec3(0.0, -0.3535 + 0.25, 0), 0.25f, 270.0f, glm::vec4(0.1, 0.7, 0.7, 1));
-mgl::RightTriangle triangle5 = mgl::RightTriangle(glm::vec3(-0.25 + glm::sqrt(1 / 32.0), -0.3535 + 0.75 + glm::sqrt(1 / 32.0), 0), 0.25f, 225.0f, glm::vec4(1, 0.3, 0.2, 1));
-
-mgl::Square square = mgl::Square(glm::vec3(0, -0.3535 + 0.25, 0), 0.25f, 0.0f, glm::vec4(0.1, 0.6, 0, 1));
-mgl::Parallelogram parallelogram = mgl::Parallelogram(glm::vec3(0, -0.3535 + 0.5, 0), 0.25f, 0.0f, glm::vec4(0.9, 0.7, 0.1, 1));
-
-std::vector<mgl::Shape> shapes = { triangle, triangle2, triangle3, triangle4, triangle5, square, parallelogram};
-
-//glm::vec4 VertexToGlmVec4(Vertex v) {
-//    return glm::vec4(
-//        v.XYZW[0], v.XYZW[1], v.XYZW[2], v.XYZW[3]
-//    );
-//}
-
-void PrintVertices(mgl::Vertex* vertexBuffer, int nVertices) {
-
-    for (int i = 0; i < nVertices; ++i) {
-        std::cout << i << ": " << vertexBuffer[i].XYZW << std::endl;
-    }
-
-}
-
-
-const mgl::Vertex Vertices[] = {
-    {{0.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{1.0f, 0.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}},
-    {{0.0f, 1.0f, 0.0f, 1.0f}, {1.0f, 0.0f, 0.0f, 1.0f}}};
-
-const GLubyte Indices[] = {0, 1, 2};
-const GLubyte squareIndices[] = { 0, 1, 2, 2, 3, 0 };
 
 void MyApp::createBufferObjects() {
   glGenVertexArrays(1, &VaoId);
@@ -117,7 +81,7 @@ void MyApp::createBufferObjects() {
 
     for (auto shape : shapes) {
         numberOfIndices += shape.indicesArrSize;
-        numberOfVertices += shape.arraySize;
+        numberOfVertices += shape.verticesArrSize;
     }
 
     GLubyte* allIndices = new GLubyte[numberOfIndices];
@@ -136,10 +100,10 @@ void MyApp::createBufferObjects() {
             allIndices[c1++] = shape.indices[i] + addToIndex;
         }
         
-        for (int i = 0; i < shape.arraySize; i++) {
+        for (int i = 0; i < shape.verticesArrSize; i++) {
             allVertices[c2++] = shape.vArray[i];
         }
-        addToIndex += shape.arraySize;
+        addToIndex += shape.verticesArrSize;
     }
 
     glBindBuffer(GL_ARRAY_BUFFER, VboId[0]);
@@ -151,10 +115,7 @@ void MyApp::createBufferObjects() {
         glEnableVertexAttribArray(COLOR);
         glVertexAttribPointer(
             COLOR, 4, GL_FLOAT, GL_FALSE, sizeof(mgl::Vertex),
-            reinterpret_cast<GLvoid*>(sizeof(allVertices[0].XYZW)));
-        
-
-      
+            reinterpret_cast<GLvoid*>(sizeof(allVertices[0].XYZW)));    
     }
     glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, VboId[1]);
     {

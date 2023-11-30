@@ -18,11 +18,11 @@ namespace mgl {
 
         Vertex* vArray;
         GLubyte* indices;
-        int arraySize;
+        int verticesArrSize;
         int indicesArrSize;
 
         Shape() {};
-        Shape(Vertex* arr, int arraySize, GLubyte* indices, int indicesArrSize) : vArray(arr), arraySize(arraySize), indices(indices), indicesArrSize(indicesArrSize) {};
+        Shape(Vertex* arr, int verticesArrSize, GLubyte* indices, int indicesArrSize) : vArray(arr), verticesArrSize(verticesArrSize), indices(indices), indicesArrSize(indicesArrSize) {};
     };
 
     class RightTriangle : public Shape {
